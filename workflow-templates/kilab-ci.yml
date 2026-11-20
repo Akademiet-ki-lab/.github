@@ -1,0 +1,51 @@
+# KI-lab CI: kjører testene, lint og typesjekk ved hver push og pull request.
+# Resultatet vises i fanen Actions og på GitHub-siden i KI-lab-dashboardet.
+# Steg som ikke finnes i package.json hoppes over. Uten noen av dem blir sjekken grønn uten å teste noe.
+name: CI
+
+on:
+  push:
+    branches: [$default-branch]
+  pull_request:
+
+# Workflowen trenger bare å lese koden.
+permissions:
+  contents: read
+
+jobs:
+  sjekk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Installer pakker
+        run: |
+          if [ ! -f package.json ]; then echo "Ingen package.json – ingenting å installere"; exit 0; fi
+          if [ -f package-lock.json ]; then npm ci; else npm install; fi
+
+      - name: Lint
+        if: hashFiles('package.json') != ''
+        run: npm run lint --if-present
+
+      - name: Typesjekk
+        if: hashFiles('package.json') != ''
+        run: npm run typecheck --if-present
+
+      - name: Tester
+        if: hashFiles('package.json') != ''
+        # Hopper over standardteksten fra «npm init» («no test specified»), som ellers alltid feiler.
+        run: |
+          if node -e 'const t = require("./package.json").scripts?.test; process.exit(t && !t.includes("no test specified") ? 0 : 1)'; then
+            npm test
+          else
+            echo "Ingen tester i package.json"
+          fi
+
+      # Vil du også sjekke at prosjektet bygger, fjern # foran de to linjene under.
+      # Trenger bygget miljøvariabler (for eksempel Supabase), må de legges inn som secrets først.
+      # - name: Bygg
+      #   run: npm run build --if-present

@@ -1,0 +1,6 @@
+{
+  "name": "KI-lab CI",
+  "description": "Kjører tester, lint og typesjekk ved hver push. Resultatet vises i KI-lab-dashboardet.",
+  "categories": ["JavaScript", "TypeScript"],
+  "filePatterns": ["package.json$"]
+}
