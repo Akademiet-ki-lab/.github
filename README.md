@@ -36,14 +36,21 @@ bilde: docs/skjermbilde.png
 ```
 
 - `publikasjon:` er adressen til det publiserte bygget. Den må starte med `https://`.
-- `bilde:` er bildet som vises på kortet: en sti i repoet (som `docs/skjermbilde.png`) eller en adresse på GitHub.
+- `bilde:` er bildet som vises på kortet: en sti fra roten av repoet (som `docs/skjermbilde.png`) eller en `https://`-adresse på `github.com` eller `*.githubusercontent.com`. Adresser til andre nettsteder avvises.
 - `publikasjon: nei` holder repoet **utenfor** Publikasjoner, selv om det har GitHub Pages eller et nettsted under «About». Bruk det for repoer som ikke er ment å vises fram, for eksempel øvingsoppgaver, verktøy eller noe som ikke er ferdig.
 
 Dashboardet leser README på nytt hver gang den endres, så endringene vises ved neste oppdatering.
 
 ### Bilde
 
-Uten `bilde:` tar dashboardet selv et skjermbilde av siden. Det fungerer ikke alltid, og da **må** du legge inn et bilde:
+Dashboardet bruker det første av disse som gir et bilde:
+
+1. Et visningsbilde som er lastet opp i dashboardet (**Endre** på kortet under Publikasjoner).
+2. Bildet `bilde:` i kilab-blokken peker på.
+3. Et skjermbilde dashboardet tar av toppen av siden, når siden er offentlig.
+4. Det første bildet i README. Merker (badges) og SVG hoppes over.
+
+Skjermbildet fungerer ikke alltid, og da **må** du legge inn et bilde:
 
 - Siden er bare synlig for organisasjonen (privat GitHub Pages).
 - Siden krever innlogging.
@@ -51,13 +58,17 @@ Uten `bilde:` tar dashboardet selv et skjermbilde av siden. Det fungerer ikke al
 
 Krav til bildet:
 
-- PNG, JPEG, WebP eller GIF (ikke SVG), under 5 MB.
+- PNG, JPEG, WebP eller GIF (ikke SVG), under 5 MB. Dashboardet sjekker innholdet i fila, ikke filendelsen.
 - Liggende, helst 1280 × 800 piksler. Kortet viser et bredt utsnitt fra toppen.
 - Vis prosjektet i bruk, for eksempel spillet midt i et brett, ikke bare menyen.
 - Ingen personopplysninger: ingen ansikter, ekte navn, e-postadresser eller passord.
 - Legg det i repoet, for eksempel som `docs/skjermbilde.png`, og pek på det med `bilde:`.
 
-Har README ingen kilab-blokk, brukes det første bildet i README hvis skjermbildet ikke virker.
+#### Når bildet oppdateres
+
+- Bildet lages på nytt ved neste oppdatering av dashboardet etter en ny commit, eller når adressen eller `bilde:` endres. Det skjer ikke med en gang.
+- Dashboardet lager bare noen få bilder per oppdatering, og de mest aktive repoene kommer først. Det kan derfor ta et par oppdateringer før bildet dukker opp.
+- Står det «Fant ikke noe bilde» på kortet, prøver dashboardet igjen etter ett døgn eller ved neste commit. Sjekk at stien stemmer (store og små bokstaver teller), at fila er pushet til standardgrenen, og at den er under 5 MB.
 
 ### Mal
 
